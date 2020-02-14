@@ -10,7 +10,7 @@
 using namespace TarkovAPI;
 using json = nlohmann::json;
 
-TEST_CASE( "Basic auth test with random hwid", "[multi-file:3][!hide]" ) // Hide than test list due than Require Input for HWID
+TEST_CASE( "Basic auth test with random hwid", "[multi-file:3][!hide]" ) // Hide than test list due than require input for 2FA
 {
     auto apiMgr = new TarkovAPIManager();
     REQUIRE( apiMgr );
