@@ -6,36 +6,36 @@
 using namespace TarkovAPI;
 static TarkovAPIManager* gs_apiMgr = nullptr;
 
-TEST_CASE( "Init test", "[multi-file:1]" )
+TEST_CASE("Init test", "[multi-file:1]")
 {
-	gs_apiMgr = new TarkovAPIManager();
-    REQUIRE( gs_apiMgr );
+    gs_apiMgr = new TarkovAPIManager();
+    REQUIRE(gs_apiMgr);
 
     try
     {
         auto ret = gs_apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
     }
-    catch (const TarkovAPIException& ex)
+    catch (const TarkovAPIException & ex)
     {
         gs_apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 }
 
-TEST_CASE( "Destroy test", "[multi-file:1]" )
+TEST_CASE("Destroy test", "[multi-file:1]")
 {
-    REQUIRE( gs_apiMgr );
+    REQUIRE(gs_apiMgr);
 
     try
     {
         auto ret = gs_apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
     }
-    catch (const TarkovAPIException& ex)
+    catch (const TarkovAPIException & ex)
     {
         gs_apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete gs_apiMgr;	
-	gs_apiMgr = nullptr;
+    delete gs_apiMgr;
+    gs_apiMgr = nullptr;
 }

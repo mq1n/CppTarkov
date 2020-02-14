@@ -43,7 +43,7 @@ namespace TarkovAPI
             }
 
             DWORD cbHashSize = 0, dwCount = sizeof(DWORD);
-            if(!CryptGetHashParam( hHash, HP_HASHSIZE, (BYTE*)&cbHashSize, &dwCount, 0))
+            if (!CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE*)&cbHashSize, &dwCount, 0))
             {
                 if (gs_pAPILogInstance) gs_pAPILogInstance->Log(__FUNCTION__, LL_ERR, fmt::format("CryptGetHashParam(1) failed. Error code: {}", GetLastError()));
                 CryptDestroyHash(hHash);
@@ -51,8 +51,8 @@ namespace TarkovAPI
                 return hash;
             }
 
-            std::vector <BYTE> buffer( cbHashSize );
-            if (!CryptGetHashParam( hHash, HP_HASHVAL, reinterpret_cast<BYTE*>(&buffer[0]), &cbHashSize, 0))
+            std::vector <BYTE> buffer(cbHashSize);
+            if (!CryptGetHashParam(hHash, HP_HASHVAL, reinterpret_cast<BYTE*>(&buffer[0]), &cbHashSize, 0))
             {
                 if (gs_pAPILogInstance) gs_pAPILogInstance->Log(__FUNCTION__, LL_ERR, fmt::format("CryptGetHashParam(2) failed. Error code: {}", GetLastError()));
                 CryptDestroyHash(hHash);
@@ -61,7 +61,7 @@ namespace TarkovAPI
             }
 
             std::ostringstream oss;
-            
+
             for (auto iter = buffer.begin(); iter != buffer.end(); ++iter)
             {
                 oss.fill('0');

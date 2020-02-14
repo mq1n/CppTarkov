@@ -26,43 +26,43 @@ namespace TarkovAPI
         {
             switch (errCode)
             {
-                case ErrorCodes::OK:
-                    break;
+            case ErrorCodes::OK:
+                break;
 
-                case ErrorCodes::NotAuthorized:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Not authorized or game profile not selected"));
-                } break;
+            case ErrorCodes::NotAuthorized:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Not authorized or game profile not selected"));
+            } break;
 
-                case ErrorCodes::BadLogin:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Bad login, invalid email or password."));
-                } break;
+            case ErrorCodes::BadLogin:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Bad login, invalid email or password."));
+            } break;
 
-                case ErrorCodes::InvalidParameters:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Invalid or missing login parameters"));
-                } break;
+            case ErrorCodes::InvalidParameters:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Invalid or missing login parameters"));
+            } break;
 
-                case ErrorCodes::TwoFactorRequired:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "2FA code is required to continue authentication."));
-                } break;
+            case ErrorCodes::TwoFactorRequired:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "2FA code is required to continue authentication."));
+            } break;
 
-                case ErrorCodes::BadTwoFactorCode:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Incorrect 2FA code."));
-                } break;
+            case ErrorCodes::BadTwoFactorCode:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Incorrect 2FA code."));
+            } break;
 
-                case ErrorCodes::CaptchaRequired:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Captcha response is required to continue authentication.."));
-                } break;
+            case ErrorCodes::CaptchaRequired:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Captcha response is required to continue authentication.."));
+            } break;
 
-                case ErrorCodes::RateLimited:
-                {
-                    throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Too many login attempts"));
-                } break;
+            case ErrorCodes::RateLimited:
+            {
+                throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Error: {}", func, "Too many login attempts"));
+            } break;
 
             default:
                 throw TarkovAPIException(Error::ApiServerError, fmt::format("Func: {} - Unknown error code: {}({})", func, err, errCode));
@@ -81,26 +81,26 @@ namespace TarkovAPI
             if (!token.empty())
                 headers.emplace("Authorization", token);
 
-            client->SetUrl(cpr::Url{url});
-            client->SetBody(cpr::Body{body});
+            client->SetUrl(cpr::Url{ url });
+            client->SetBody(cpr::Body{ body });
             client->SetHeader(headers);
-            
+
             auto res = client->Post();
 
             switch (res.error.code) // CPR error code
             {
-                case cpr::ErrorCode::OK:
-                    break;
-                default:
-                    throw TarkovAPIException(Error::CprApiFailed, res.error.message);
+            case cpr::ErrorCode::OK:
+                break;
+            default:
+                throw TarkovAPIException(Error::CprApiFailed, res.error.message);
             }
 
             switch (res.status_code) // HTTP status code
             {
-                case 200: // OK
-                    break;
-                default:
-                    throw TarkovAPIException(Error::CprPostFailed, res.status_code);
+            case 200: // OK
+                break;
+            default:
+                throw TarkovAPIException(Error::CprPostFailed, res.status_code);
             }
 
             std::vector <uint8_t> decompresseddata(res.text.size() * 10);
@@ -120,7 +120,7 @@ namespace TarkovAPI
             {
                 deserialized = json::parse(decompresseddata.data());
             }
-            catch (const json::parse_error& ex)
+            catch (const json::parse_error & ex)
             {
                 std::stringstream ss;
                 ss << "Message: " << ex.what() << '\n' << "exception id: " << ex.id << '\n' << "byte position of error: " << ex.byte << std::endl;
@@ -141,7 +141,7 @@ namespace TarkovAPI
 
             return deserialized;
         }
-        
+
         static void CheckLauncherVersion(cpr::Session* client)
         {
             auto url = fmt::format(
@@ -149,7 +149,7 @@ namespace TarkovAPI
                 LAUNCHER_ENDPOINT
             );
 
-            auto res = LauncherPostJson(client, url, "");  
+            auto res = LauncherPostJson(client, url, "");
             OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
 
             if (!res["data"].contains("Version"))
@@ -176,7 +176,7 @@ namespace TarkovAPI
                 LAUNCHER_ENDPOINT, LAUNCHER_VERSION
             );
 
-            auto res = LauncherPostJson(client, url, "");  
+            auto res = LauncherPostJson(client, url, "");
             OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
 
             if (!res["data"][0].contains("Version"))
@@ -208,7 +208,7 @@ namespace TarkovAPI
             body["hwCode"] = hwid;
             body["email"] = email;
 
-            auto res = LauncherPostJson(client, url, body.dump());  
+            auto res = LauncherPostJson(client, url, body.dump());
             OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
         }
 
@@ -228,7 +228,7 @@ namespace TarkovAPI
             body["hwCode"] = hwid;
             body["version"] = version_ctx;
 
-            auto res = LauncherPostJson(client, url, body.dump(), access_token);  
+            auto res = LauncherPostJson(client, url, body.dump(), access_token);
             OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
 
             return res["data"].dump();
@@ -251,31 +251,31 @@ namespace TarkovAPI
             auto res = LauncherPostJson(client, url, body.dump());
             switch (res["err"].get<int32_t>())
             {
-                case ErrorCodes::TwoFactorRequired:
-                {
-                    gs_pAPILogInstance->Log(__FUNCTION__, LL_SYS, "2FA code is required to continue authentication.");
-                    std::cout << "Code: ";
-                    
-                    std::string code;
-                    std::cin >> code;
+            case ErrorCodes::TwoFactorRequired:
+            {
+                gs_pAPILogInstance->Log(__FUNCTION__, LL_SYS, "2FA code is required to continue authentication.");
+                std::cout << "Code: ";
 
-                    auth::ActivateHardware(client, email, code, hwid);
-                    return LoginImpl(client, email, password, captcha, hwid);
-                } break;
+                std::string code;
+                std::cin >> code;
 
-                case ErrorCodes::CaptchaRequired:
-                {
-                    gs_pAPILogInstance->Log(__FUNCTION__, LL_CRI, "Captcha required to continue authentication, Change your IP address and try again.");
-                    abort();
+                auth::ActivateHardware(client, email, code, hwid);
+                return LoginImpl(client, email, password, captcha, hwid);
+            } break;
 
-                    // #TODO: Launch lightweight Web UI and solve manually
-                    // URL: https://launcher.escapefromtarkov.com/launcher/login
-                    // Site key: 6LexEI4UAAAAAIFtNZALcloZfEgHhB8rEUqC1LwV
-                } break;
+            case ErrorCodes::CaptchaRequired:
+            {
+                gs_pAPILogInstance->Log(__FUNCTION__, LL_CRI, "Captcha required to continue authentication, Change your IP address and try again.");
+                abort();
 
-                default:
-                    OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
-                    break;
+                // #TODO: Launch lightweight Web UI and solve manually
+                // URL: https://launcher.escapefromtarkov.com/launcher/login
+                // Site key: 6LexEI4UAAAAAIFtNZALcloZfEgHhB8rEUqC1LwV
+            } break;
+
+            default:
+                OnLauncherResponseHandle(__FUNCTION__, res["errmsg"].dump(), res["err"].get<int32_t>());
+                break;
             }
 
             return res["data"].dump();

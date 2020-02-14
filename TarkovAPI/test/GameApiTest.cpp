@@ -8,204 +8,204 @@
 using namespace TarkovAPI;
 using json = nlohmann::json;
 
-TEST_CASE( "Keep alive test", "[multi-file:4]" )
+TEST_CASE("Keep alive test", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->KeepAlive();
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Constants stuff tests", "[multi-file:4]" )
+TEST_CASE("Constants stuff tests", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto data = apiMgr->GetItems();
-        REQUIRE( !data.empty() );
+        auto data = apiMgr->GetItems();
+        REQUIRE(!data.empty());
 
-		data = apiMgr->GetItemPrices();
-        REQUIRE( !data.empty() );
+        data = apiMgr->GetItemPrices();
+        REQUIRE(!data.empty());
 
         data = apiMgr->GetLocations();
-        REQUIRE( !data.empty() );
+        REQUIRE(!data.empty());
 
-		data = apiMgr->GetWeather();
-        REQUIRE( !data.empty() );
+        data = apiMgr->GetWeather();
+        REQUIRE(!data.empty());
 
-		data = apiMgr->GetI18n("en");
-        REQUIRE( !data.empty() );
+        data = apiMgr->GetI18n("en");
+        REQUIRE(!data.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Profile tests", "[multi-file:4]" )
+TEST_CASE("Profile tests", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto friends = apiMgr->GetFriends();
-        REQUIRE( !friends.empty() );
+        REQUIRE(!friends.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Search traders", "[multi-file:4]" )
+TEST_CASE("Search traders", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto traders = apiMgr->GetTraders();
-        REQUIRE( !traders.empty() );
+        REQUIRE(!traders.empty());
 
         auto mechanic_id = apiMgr->GetTraderIdByName("Mechanic");
-        REQUIRE( !mechanic_id.empty() );
+        REQUIRE(!mechanic_id.empty());
 
         auto mechanic = apiMgr->GetTrader(mechanic_id);
-        REQUIRE( !mechanic.empty() );
+        REQUIRE(!mechanic.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Search trader items", "[multi-file:4]" )
+TEST_CASE("Search trader items", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto mechanic_id = apiMgr->GetTraderIdByName("Mechanic");
-        REQUIRE( !mechanic_id.empty() );
+        REQUIRE(!mechanic_id.empty());
 
         auto traders = apiMgr->GetTraders();
-        REQUIRE( !traders.empty() );
+        REQUIRE(!traders.empty());
 
         auto mechanic = apiMgr->GetTrader(mechanic_id);
-        REQUIRE( !mechanic.empty() );
+        REQUIRE(!mechanic.empty());
 
         auto mechanic_items = apiMgr->GetTraderItems(mechanic_id);
-        REQUIRE( !mechanic_items.empty() );
+        REQUIRE(!mechanic_items.empty());
 
         /*
         "56d59d3ad2720bdb418b4577":{
@@ -216,62 +216,62 @@ TEST_CASE( "Search trader items", "[multi-file:4]" )
         },
         */
         auto buy_item_tpl = std::string("56d59d3ad2720bdb418b4577");
-        REQUIRE( !buy_item_tpl.empty() );
+        REQUIRE(!buy_item_tpl.empty());
 
         auto it = std::find_if(mechanic_items.begin(), mechanic_items.end(), [&buy_item_tpl](const quicktype::TraderItem& x)
-        {
-            return x._tpl == buy_item_tpl;
-        });
-        REQUIRE( it != mechanic_items.end() );
+            {
+                return x._tpl == buy_item_tpl;
+            });
+        REQUIRE(it != mechanic_items.end());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Sell item to trader", "[multi-file:4]" )
+TEST_CASE("Sell item to trader", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto mechanic_id = apiMgr->GetTraderIdByName("Mechanic");
-        REQUIRE( !mechanic_id.empty() );
+        REQUIRE(!mechanic_id.empty());
 
         auto traders = apiMgr->GetTraders();
-        REQUIRE( !traders.empty() );
+        REQUIRE(!traders.empty());
 
         auto mechanic = apiMgr->GetTrader(mechanic_id);
-        REQUIRE( !mechanic.empty() );
+        REQUIRE(!mechanic.empty());
 
         uint64_t roubleCount = apiMgr->GetRoubleCount();
-        REQUIRE( roubleCount > 3000 );
+        REQUIRE(roubleCount > 3000);
 
         const auto number_fmt = [](uint64_t n)
         {
@@ -299,53 +299,53 @@ TEST_CASE( "Sell item to trader", "[multi-file:4]" )
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Rouble count: {}", number_fmt(roubleCount)));
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Buy item than trader with cash", "[multi-file:4]" )
+TEST_CASE("Buy item than trader with cash", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto mechanic_id = apiMgr->GetTraderIdByName("Mechanic");
-        REQUIRE( !mechanic_id.empty() );
+        REQUIRE(!mechanic_id.empty());
 
         auto traders = apiMgr->GetTraders();
-        REQUIRE( !traders.empty() );
+        REQUIRE(!traders.empty());
 
         auto mechanic = apiMgr->GetTrader(mechanic_id);
-        REQUIRE( !mechanic.empty() );
+        REQUIRE(!mechanic.empty());
 
         auto rouble_count = apiMgr->GetRoubleCount();
-        REQUIRE( rouble_count );
+        REQUIRE(rouble_count);
 
         const auto number_fmt = [](uint64_t n)
         {
@@ -368,7 +368,7 @@ TEST_CASE( "Buy item than trader with cash", "[multi-file:4]" )
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Rouble count: {}", number_fmt(rouble_count)));
 
         auto mechanic_items = apiMgr->GetTraderItems(mechanic_id);
-        REQUIRE( !mechanic_items.empty() );
+        REQUIRE(!mechanic_items.empty());
 
         /*
         "56d59d3ad2720bdb418b4577":{
@@ -379,82 +379,82 @@ TEST_CASE( "Buy item than trader with cash", "[multi-file:4]" )
         },
         */
         auto buy_item_tpl = std::string("56d59d3ad2720bdb418b4577");
-        REQUIRE( !buy_item_tpl.empty() );
+        REQUIRE(!buy_item_tpl.empty());
 
         auto buy_item_count = 3;
-        REQUIRE( buy_item_count > 0 );
+        REQUIRE(buy_item_count > 0);
 
         auto it = std::find_if(mechanic_items.begin(), mechanic_items.end(), [&buy_item_tpl](const quicktype::TraderItem& x)
-        {
-            return x._tpl == buy_item_tpl;
-        });
-        REQUIRE( it != mechanic_items.end() );
+            {
+                return x._tpl == buy_item_tpl;
+            });
+        REQUIRE(it != mechanic_items.end());
 
-        REQUIRE( it->costs.size() == 1 );
-        REQUIRE( it->costs.at(0)._tpl == ROUBLE_ITEM_ID);
-        REQUIRE( buy_item_count <= it->upd->stack_objects_count );
+        REQUIRE(it->costs.size() == 1);
+        REQUIRE(it->costs.at(0)._tpl == ROUBLE_ITEM_ID);
+        REQUIRE(buy_item_count <= it->upd->stack_objects_count);
 
         auto item_price = apiMgr->GetItemPrice(it->costs.at(0).count, buy_item_count);
-        REQUIRE( item_price > 0 );
+        REQUIRE(item_price > 0);
 
         auto given_item_ids = apiMgr->FindItemStack(ROUBLE_ITEM_ID, static_cast<uint64_t>(item_price));
-        REQUIRE( !given_item_ids.empty() );
+        REQUIRE(!given_item_ids.empty());
 
         apiMgr->TradeItem(mechanic_id, it->_id, buy_item_count, given_item_ids);
 
         auto new_rouble = apiMgr->GetRoubleCount();
-        REQUIRE( rouble_count != new_rouble );
+        REQUIRE(rouble_count != new_rouble);
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Rouble count: {}", number_fmt(new_rouble)));
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Buy item than trader with barter", "[multi-file:4]" )
+TEST_CASE("Buy item than trader with barter", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto therapist_id = apiMgr->GetTraderIdByName("Therapist");
-        REQUIRE( !therapist_id.empty() );
+        REQUIRE(!therapist_id.empty());
 
         auto traders = apiMgr->GetTraders();
-        REQUIRE( !traders.empty() );
+        REQUIRE(!traders.empty());
 
         auto therapist = apiMgr->GetTrader(therapist_id);
-        REQUIRE( !therapist.empty() );
+        REQUIRE(!therapist.empty());
 
         auto therapist_items = apiMgr->GetTraderItems(therapist_id);
-        REQUIRE( !therapist_items.empty() );
+        REQUIRE(!therapist_items.empty());
 
         /*
         "544fb37f4bdc2dee738b4567":{
@@ -464,10 +464,10 @@ TEST_CASE( "Buy item than trader with barter", "[multi-file:4]" )
         },
         */
         auto buy_item_tpl = std::string("544fb37f4bdc2dee738b4567");
-        REQUIRE( !buy_item_tpl.empty() );
+        REQUIRE(!buy_item_tpl.empty());
 
         auto buy_item_count = 3;
-        REQUIRE( buy_item_count > 0 );
+        REQUIRE(buy_item_count > 0);
 
         /*
         "57347b8b24597737dd42e192":{
@@ -478,166 +478,166 @@ TEST_CASE( "Buy item than trader with barter", "[multi-file:4]" )
         */
 
         auto matches_tpl = std::string("57347b8b24597737dd42e192");
-        REQUIRE( !matches_tpl.empty() );
+        REQUIRE(!matches_tpl.empty());
 
         auto it = std::find_if(therapist_items.begin(), therapist_items.end(), [&buy_item_tpl, &matches_tpl](const quicktype::TraderItem& x)
-        {
-            return x._tpl == buy_item_tpl && x.costs.at(0)._tpl == matches_tpl;
-        });
-        REQUIRE( it != therapist_items.end() );
+            {
+                return x._tpl == buy_item_tpl && x.costs.at(0)._tpl == matches_tpl;
+            });
+        REQUIRE(it != therapist_items.end());
 
-        REQUIRE( it->costs.size() == 1 );
-        REQUIRE( buy_item_count <= it->upd->stack_objects_count );
+        REQUIRE(it->costs.size() == 1);
+        REQUIRE(buy_item_count <= it->upd->stack_objects_count);
 
         auto required_item_count = it->costs.at(0).count * buy_item_count;
-        REQUIRE( required_item_count );
+        REQUIRE(required_item_count);
 
-        auto given_item_ids = apiMgr->FindItemStack(matches_tpl, static_cast<int64_t>(it->costs.at(0).count) * buy_item_count);
-        REQUIRE( !given_item_ids.empty() );
+        auto given_item_ids = apiMgr->FindItemStack(matches_tpl, static_cast<int64_t>(it->costs.at(0).count)* buy_item_count);
+        REQUIRE(!given_item_ids.empty());
 
         auto trade_ret = apiMgr->TradeItem(therapist_id, it->_id, buy_item_count, given_item_ids);
-        REQUIRE( !trade_ret.empty() );
+        REQUIRE(!trade_ret.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Flea market getters", "[multi-file:4]" )
+TEST_CASE("Flea market getters", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto search_ret = apiMgr->SearchMarket(quicktype::MarketFilterBody{});
-        REQUIRE( !search_ret.empty() );
-        
+        REQUIRE(!search_ret.empty());
+
         auto price_ret = apiMgr->GetItemPrice("5696686a4bdc2da3298b456a");
-        REQUIRE( !price_ret.empty() );
-        
+        REQUIRE(!price_ret.empty());
+
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Sell item to regfair", "[multi-file:4]" )
+TEST_CASE("Sell item to regfair", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto painkiller_tpl = "544fb37f4bdc2dee738b4567";
 
         auto painkiller = apiMgr->FindItemStack(painkiller_tpl);
-        REQUIRE( !painkiller.empty() );
+        REQUIRE(!painkiller.empty());
 
         // '{"avg":21345.837037037,"max":155000,"min":483,"templateId":"544fb37f4bdc2dee738b4567"}'
         auto price = apiMgr->GetItemPrice(painkiller_tpl);
-        REQUIRE( !price.empty() );
-		REQUIRE( price.contains("avg") );
-       
+        REQUIRE(!price.empty());
+        REQUIRE(price.contains("avg"));
+
         auto avg_price = static_cast<int64_t>(std::round(price["avg"].get<double>()));
-        REQUIRE( avg_price > 0 );
-        
+        REQUIRE(avg_price > 0);
+
         auto offer_ret = apiMgr->OfferItem(
             { painkiller.at(0)._tpl },
             { ROUBLE_ITEM_ID, avg_price },
             false
         );
-        REQUIRE( !offer_ret.empty() );
+        REQUIRE(!offer_ret.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
+TEST_CASE("Buy item than regfair", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
         auto locale = apiMgr->GetI18n("en");
-		REQUIRE( !locale.empty() );
-		REQUIRE( locale.contains("handbook") );
+        REQUIRE(!locale.empty());
+        REQUIRE(locale.contains("handbook"));
 
         auto barter_catergory_id = std::string();
         for (const auto& item : locale["handbook"].items())
@@ -648,7 +648,7 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
                 break;
             }
         }
-    	REQUIRE( !barter_catergory_id.empty() );
+        REQUIRE(!barter_catergory_id.empty());
 
         auto filter = quicktype::MarketFilterBody{}
             .set_price_to(2000)
@@ -656,11 +656,11 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
             .set_offer_owner_type(quicktype::MarketOwner::Player)
             .set_remove_bartering(true)
             .set_currency(quicktype::MarketCurrency::Rouble)
-        ;
+            ;
 
         auto offers = apiMgr->SearchMarket(filter);
-    	REQUIRE( !offers.empty() );
-    	REQUIRE( offers.contains("offers") );
+        REQUIRE(!offers.empty());
+        REQUIRE(offers.contains("offers"));
         /*
         {
             "categories":{
@@ -673,7 +673,7 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
             "selectedCategory":"5b47574386f77428ca22b33e"
         }
         */
-    
+
         auto st = std::time(nullptr);
         auto epoch_time = static_cast<std::chrono::seconds>(st).count();
 
@@ -712,11 +712,11 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
         {
             const auto offer_index = offers_ctx.key();
             const auto curr_offer = offers_ctx.value();
-            
-            REQUIRE( curr_offer.contains("startTime") );
-            REQUIRE( curr_offer.contains("endTime") );
-            REQUIRE( curr_offer.contains("requirementsCost") );
-            REQUIRE( curr_offer.contains("_id") );
+
+            REQUIRE(curr_offer.contains("startTime"));
+            REQUIRE(curr_offer.contains("endTime"));
+            REQUIRE(curr_offer.contains("requirementsCost"));
+            REQUIRE(curr_offer.contains("_id"));
 
             if (curr_offer["startTime"].get<int64_t>() + 60 <= epoch_time &&
                 curr_offer["endTime"].get<int64_t>() >= epoch_time)
@@ -725,8 +725,8 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
                 auto required_rouble = curr_offer["requirementsCost"].get<uint64_t>();
                 auto rouble_count = apiMgr->GetRoubleCount();
 
-                REQUIRE( curr_offer["items"].size() == 1 );
-                REQUIRE( curr_offer["items"][0].contains("_tpl") );
+                REQUIRE(curr_offer["items"].size() == 1);
+                REQUIRE(curr_offer["items"][0].contains("_tpl"));
 
                 auto item_schema_id = curr_offer["items"][0]["_tpl"].get<std::string>();
                 auto item_name = apiMgr->GetItemName(item_schema_id);
@@ -738,7 +738,7 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
                     auto rouble_ids = apiMgr->FindItemStack(ROUBLE_ITEM_ID, required_rouble);
 
                     auto buy_ret = apiMgr->BuyItem(offer_id, 1, rouble_ids);
-                    REQUIRE( !buy_ret.empty() );
+                    REQUIRE(!buy_ret.empty());
 
                     apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("The {}(Offer: '{}'): has been bought for {} roubles",
                         item_name, offer_id, required_rouble));
@@ -747,39 +747,39 @@ TEST_CASE( "Buy item than regfair", "[multi-file:4]" )
         }
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Stack/Transfer roubles in inventory", "[multi-file:4]" )
+TEST_CASE("Stack/Transfer roubles in inventory", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
@@ -789,56 +789,56 @@ TEST_CASE( "Stack/Transfer roubles in inventory", "[multi-file:4]" )
         auto to_id = std::string();
         int64_t amount = 0;
         auto it = std::find_if(rouble_ids.begin(), rouble_ids.end(), [&from_id, &to_id, &amount](const quicktype::TraderBarterItem& x)
-        {
-            if (to_id.empty() && x.count < 500000)
             {
-                to_id = x._tpl;
-                amount = 500000 - static_cast<int64_t>(x.count);
-            }
-            if (from_id.empty() && to_id != x._tpl)
-            {
-                from_id = x._tpl;
-            }
-            return !from_id.empty() && !to_id.empty();
-        });
+                if (to_id.empty() && x.count < 500000)
+                {
+                    to_id = x._tpl;
+                    amount = 500000 - static_cast<int64_t>(x.count);
+                }
+                if (from_id.empty() && to_id != x._tpl)
+                {
+                    from_id = x._tpl;
+                }
+                return !from_id.empty() && !to_id.empty();
+            });
 
         auto stack_ret = apiMgr->StackItem(from_id, to_id, amount);
-        REQUIRE( !stack_ret.empty() );
+        REQUIRE(!stack_ret.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }
 
-TEST_CASE( "Merge bullets in inventory", "[multi-file:4]" )
+TEST_CASE("Merge bullets in inventory", "[multi-file:4]")
 {
-	auto apiMgr = new TarkovAPIManager();
-    REQUIRE( apiMgr );
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
 
     try
     {
         auto ret = apiMgr->InitializeTarkovAPIManager();
-        REQUIRE( ret );
+        REQUIRE(ret);
 
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
 
-		auto me = apiMgr->GetMyProfile();
-		REQUIRE( me.contains("_id") );
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
 
         apiMgr->SelectProfile(me["_id"].get<std::string>());
-        REQUIRE( me.contains("Info") );
-        REQUIRE( me["Info"].contains("Nickname") );
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
 
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
 
@@ -855,33 +855,33 @@ TEST_CASE( "Merge bullets in inventory", "[multi-file:4]" )
         auto from_id = std::string();
         auto to_id = std::string();
         auto it = std::find_if(rouble_ids.begin(), rouble_ids.end(), [&from_id, &to_id](const quicktype::TraderBarterItem& x)
-        {
-            if (to_id.empty())
             {
-                to_id = x._tpl;
-            }
-            if (from_id.empty() && to_id != x._tpl)
-            {
-                from_id = x._tpl;
-            }
-            return !from_id.empty() && !to_id.empty();
-        });
+                if (to_id.empty())
+                {
+                    to_id = x._tpl;
+                }
+                if (from_id.empty() && to_id != x._tpl)
+                {
+                    from_id = x._tpl;
+                }
+                return !from_id.empty() && !to_id.empty();
+            });
 
         auto stack_ret = apiMgr->StackItem(from_id, to_id);
-        REQUIRE( !stack_ret.empty() );
+        REQUIRE(!stack_ret.empty());
 
         ret = apiMgr->FinalizeTarkovAPIManager();
-        REQUIRE( ret );        
+        REQUIRE(ret);
     }
-	catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
-    }	
+    }
 
-    delete apiMgr;	
-	apiMgr = nullptr;
+    delete apiMgr;
+    apiMgr = nullptr;
 }

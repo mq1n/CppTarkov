@@ -9,7 +9,7 @@
 
 namespace TarkovAPI
 {
-    static constexpr auto CUSTOM_LOG_FILENAME       = "TarkovAPI.log";
+    static constexpr auto CUSTOM_LOG_FILENAME = "TarkovAPI.log";
     static constexpr auto CUSTOM_LOG_ERROR_FILENAME = "TarkovAPIError.log";
 
     enum ELogLevels
@@ -24,19 +24,19 @@ namespace TarkovAPI
 
     class CLog
     {
-        public:
-            CLog() = default;
-            CLog(const std::string& stLoggerName, const std::string& stFileName);
-			~CLog() = default;
+    public:
+        CLog() = default;
+        CLog(const std::string& stLoggerName, const std::string& stFileName);
+        ~CLog() = default;
 
-            void Log(const std::string& stFunction, int32_t nLevel, const std::string& stBuffer);
+        void Log(const std::string& stFunction, int32_t nLevel, const std::string& stBuffer);
 
-        private:
-            mutable std::recursive_mutex		m_pkMtMutex;
+    private:
+        mutable std::recursive_mutex		m_pkMtMutex;
 
-            std::shared_ptr <spdlog::logger>	m_pkLoggerImpl;
-            std::string							m_stLoggerName;
-            std::string							m_stFileName;
+        std::shared_ptr <spdlog::logger>	m_pkLoggerImpl;
+        std::string							m_stLoggerName;
+        std::string							m_stFileName;
     };
 
     extern CLog* gs_pAPILogInstance;

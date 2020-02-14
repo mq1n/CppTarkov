@@ -15,11 +15,11 @@
 namespace nlohmann {
     template <typename T>
     struct adl_serializer<std::shared_ptr<T>> {
-        static void to_json(json & j, const std::shared_ptr<T> & opt) {
+        static void to_json(json& j, const std::shared_ptr<T>& opt) {
             if (!opt) j = nullptr; else j = *opt;
         }
 
-        static std::shared_ptr<T> from_json(const json & j) {
+        static std::shared_ptr<T> from_json(const json& j) {
             if (j.is_null()) return std::unique_ptr<T>(); else return std::unique_ptr<T>(new T(j.get<T>()));
         }
     };
@@ -29,21 +29,21 @@ namespace nlohmann {
 namespace quicktype // https://app.quicktype.io
 {
     inline nlohmann::json get_untyped(const nlohmann::json& j, const char* property)
-	{
+    {
         if (!j.empty() && j.find(property) != j.end())
-		{
+        {
             return j.at(property).get<nlohmann::json>();
         }
         return nlohmann::json();
     }
 
     inline nlohmann::json get_untyped(const nlohmann::json& j, const std::string& property)
-	{
+    {
         return get_untyped(j, property.data());
     }
 
     template <typename T>
-    inline std::shared_ptr<T> get_optional(const nlohmann::json & j, const char * property) {
+    inline std::shared_ptr<T> get_optional(const nlohmann::json& j, const char* property) {
         if (j.find(property) != j.end()) {
             return j.at(property).get<std::shared_ptr<T>>();
         }
@@ -51,13 +51,13 @@ namespace quicktype // https://app.quicktype.io
     }
 
     template <typename T>
-    inline std::shared_ptr<T> get_optional(const nlohmann::json & j, std::string property) {
+    inline std::shared_ptr<T> get_optional(const nlohmann::json& j, std::string property) {
         return get_optional<T>(j, property.data());
     }
 
     // Common decompressed API response
     struct ResponseBody
-	{
+    {
         nlohmann::json data;
         int64_t err;
         std::string errmsg;
@@ -201,8 +201,8 @@ namespace quicktype // https://app.quicktype.io
     struct ItemMoveTo
     {
         std::string id;
-        std::string container{"main"};
-        quicktype::ItemMoveLocation location{0, 0, 0};
+        std::string container{ "main" };
+        quicktype::ItemMoveLocation location{ 0, 0, 0 };
     };
     struct ItemMoveDatum
     {
@@ -258,7 +258,7 @@ namespace quicktype // https://app.quicktype.io
         std::string id;
         uint64_t count;
     };
-    
+
     // Enums
     enum class MarketSortBy : int64_t
     {
@@ -305,8 +305,8 @@ namespace quicktype // https://app.quicktype.io
     };
 
     // Market filter context
-	struct MarketFilterBody
-	{
+    struct MarketFilterBody
+    {
         int64_t page{ 0 };
         int64_t limit{ 15 };
         MarketSortBy sort_type{ MarketSortBy::Price };
@@ -354,446 +354,446 @@ namespace quicktype // https://app.quicktype.io
                 ,
                 page, limit, sort_type, sort_direction, currency,
                 price_from, price_to, quantity_from, quantity_to,
-                condition_from, condition_to, one_hour_expiration, 
+                condition_from, condition_to, one_hour_expiration,
                 remove_bartering, offer_owner_type, only_functional,
-                update_offer_count, handbook_id, linked_search_id, 
+                update_offer_count, handbook_id, linked_search_id,
                 needed_search_id
             );
             return out;
         }
 
-        auto set_page(int64_t val)                          { page = val; return *this; }
-        auto set_limit(int64_t val)                         { limit = val; return *this; }
-        auto set_sort_type(MarketSortBy val)                { sort_type = val; return *this; }
-        auto set_sort_direction(MarketSortDirection val)    { sort_direction = val; return *this; }
-        auto set_currency(MarketCurrency val)               { currency = val; return *this; }
-        auto set_price_from(int64_t val)                    { price_from = val; return *this; }
-        auto set_price_to(int64_t val)                      { price_to = val; return *this; }
-        auto set_quantity_from(int64_t val)                 { quantity_from = val; return *this; }
-        auto set_quantity_to(int64_t val)                   { quantity_to = val; return *this; }
-        auto set_condition_from(int64_t val)                { condition_from = val; return *this; }
-        auto set_condition_to(int64_t val)                  { condition_to = val; return *this; }
-        auto set_one_hour_expiration(bool val)              { one_hour_expiration = val; return *this; }
-        auto set_remove_bartering(bool val)                 { remove_bartering = val; return *this; }
-        auto set_offer_owner_type(MarketOwner val)          { offer_owner_type = val; return *this; }
-        auto set_only_functional(bool val)                  { only_functional = val; return *this; }
-        auto set_update_offer_count(bool val)               { update_offer_count = val; return *this; }
-        auto set_handbook_id(std::string val)               { handbook_id = val; return *this; }
-        auto set_linked_search_id(std::string val)          { linked_search_id = val; return *this; }
-        auto set_needed_search_id(std::string val)          { needed_search_id = val; return *this; }
-        auto set_tm(int64_t val)                            { tm = val; return *this; }
+        auto set_page(int64_t val) { page = val; return *this; }
+        auto set_limit(int64_t val) { limit = val; return *this; }
+        auto set_sort_type(MarketSortBy val) { sort_type = val; return *this; }
+        auto set_sort_direction(MarketSortDirection val) { sort_direction = val; return *this; }
+        auto set_currency(MarketCurrency val) { currency = val; return *this; }
+        auto set_price_from(int64_t val) { price_from = val; return *this; }
+        auto set_price_to(int64_t val) { price_to = val; return *this; }
+        auto set_quantity_from(int64_t val) { quantity_from = val; return *this; }
+        auto set_quantity_to(int64_t val) { quantity_to = val; return *this; }
+        auto set_condition_from(int64_t val) { condition_from = val; return *this; }
+        auto set_condition_to(int64_t val) { condition_to = val; return *this; }
+        auto set_one_hour_expiration(bool val) { one_hour_expiration = val; return *this; }
+        auto set_remove_bartering(bool val) { remove_bartering = val; return *this; }
+        auto set_offer_owner_type(MarketOwner val) { offer_owner_type = val; return *this; }
+        auto set_only_functional(bool val) { only_functional = val; return *this; }
+        auto set_update_offer_count(bool val) { update_offer_count = val; return *this; }
+        auto set_handbook_id(std::string val) { handbook_id = val; return *this; }
+        auto set_linked_search_id(std::string val) { linked_search_id = val; return *this; }
+        auto set_needed_search_id(std::string val) { needed_search_id = val; return *this; }
+        auto set_tm(int64_t val) { tm = val; return *this; }
     };
 }
 
 
 namespace nlohmann {
-namespace detail {
-    void from_json(const json & j, quicktype::BuyOfferContext & x);
-    void to_json(json & j, const quicktype::BuyOfferContext & x);
+    namespace detail {
+        void from_json(const json& j, quicktype::BuyOfferContext& x);
+        void to_json(json& j, const quicktype::BuyOfferContext& x);
 
-    void from_json(const json & j, quicktype::BuyDatumContext & x);
-    void to_json(json & j, const quicktype::BuyDatumContext & x);
+        void from_json(const json& j, quicktype::BuyDatumContext& x);
+        void to_json(json& j, const quicktype::BuyDatumContext& x);
 
-    void from_json(const json & j, quicktype::MarketBuyReqBody & x);
-    void to_json(json & j, const quicktype::MarketBuyReqBody & x);
+        void from_json(const json& j, quicktype::MarketBuyReqBody& x);
+        void to_json(json& j, const quicktype::MarketBuyReqBody& x);
 
-    void from_json(const json & j, quicktype::SellItemContext & x);
-    void to_json(json & j, const quicktype::SellItemContext & x);
+        void from_json(const json& j, quicktype::SellItemContext& x);
+        void to_json(json& j, const quicktype::SellItemContext& x);
 
-    void from_json(const json & j, quicktype::SellDatumContext & x);
-    void to_json(json & j, const quicktype::SellDatumContext & x);
+        void from_json(const json& j, quicktype::SellDatumContext& x);
+        void to_json(json& j, const quicktype::SellDatumContext& x);
 
-    void from_json(const json & j, quicktype::MarketSellReqBody & x);
-    void to_json(json & j, const quicktype::MarketSellReqBody & x);
+        void from_json(const json& j, quicktype::MarketSellReqBody& x);
+        void to_json(json& j, const quicktype::MarketSellReqBody& x);
 
-    void from_json(const json & j, quicktype::OfferRequirementContext & x);
-    void to_json(json & j, const quicktype::OfferRequirementContext & x);
+        void from_json(const json& j, quicktype::OfferRequirementContext& x);
+        void to_json(json& j, const quicktype::OfferRequirementContext& x);
 
-    void from_json(const json & j, quicktype::OfferDatumContext & x);
-    void to_json(json & j, const quicktype::OfferDatumContext & x);
+        void from_json(const json& j, quicktype::OfferDatumContext& x);
+        void to_json(json& j, const quicktype::OfferDatumContext& x);
 
-    void from_json(const json & j, quicktype::MarketOfferReqBody & x);
-    void to_json(json & j, const quicktype::MarketOfferReqBody & x);
+        void from_json(const json& j, quicktype::MarketOfferReqBody& x);
+        void to_json(json& j, const quicktype::MarketOfferReqBody& x);
 
-    void from_json(const json & j, quicktype::ItemStackDatum & x);
-    void to_json(json & j, const quicktype::ItemStackDatum & x);
+        void from_json(const json& j, quicktype::ItemStackDatum& x);
+        void to_json(json& j, const quicktype::ItemStackDatum& x);
 
-    void from_json(const json & j, quicktype::ItemStackBody & x);
-    void to_json(json & j, const quicktype::ItemStackBody & x);
-    
-    void from_json(const json & j, quicktype::ItemTransferDatum & x);
-    void to_json(json & j, const quicktype::ItemTransferDatum & x);
+        void from_json(const json& j, quicktype::ItemStackBody& x);
+        void to_json(json& j, const quicktype::ItemStackBody& x);
 
-    void from_json(const json & j, quicktype::ItemTransferBody & x);
-    void to_json(json & j, const quicktype::ItemTransferBody & x);
+        void from_json(const json& j, quicktype::ItemTransferDatum& x);
+        void to_json(json& j, const quicktype::ItemTransferDatum& x);
 
-    void from_json(const json & j, quicktype::ItemMoveLocation & x);
-    void to_json(json & j, const quicktype::ItemMoveLocation & x);
+        void from_json(const json& j, quicktype::ItemTransferBody& x);
+        void to_json(json& j, const quicktype::ItemTransferBody& x);
 
-    void from_json(const json & j, quicktype::ItemMoveTo & x);
-    void to_json(json & j, const quicktype::ItemMoveTo & x);
+        void from_json(const json& j, quicktype::ItemMoveLocation& x);
+        void to_json(json& j, const quicktype::ItemMoveLocation& x);
 
-    void from_json(const json & j, quicktype::ItemMoveDatum & x);
-    void to_json(json & j, const quicktype::ItemMoveDatum & x);
+        void from_json(const json& j, quicktype::ItemMoveTo& x);
+        void to_json(json& j, const quicktype::ItemMoveTo& x);
 
-    void from_json(const json & j, quicktype::ItemMoveBody & x);
-    void to_json(json & j, const quicktype::ItemMoveBody & x);
+        void from_json(const json& j, quicktype::ItemMoveDatum& x);
+        void to_json(json& j, const quicktype::ItemMoveDatum& x);
 
-    void from_json(const json & j, quicktype::TraderBarterItem & x);
-    void to_json(json & j, const quicktype::TraderBarterItem & x);
+        void from_json(const json& j, quicktype::ItemMoveBody& x);
+        void to_json(json& j, const quicktype::ItemMoveBody& x);
 
-    void from_json(const json & j, quicktype::TradeItemDatum & x);
-    void to_json(json & j, const quicktype::TradeItemDatum & x);
+        void from_json(const json& j, quicktype::TraderBarterItem& x);
+        void to_json(json& j, const quicktype::TraderBarterItem& x);
 
-    void from_json(const json & j, quicktype::TradeItemBody & x);
-    void to_json(json & j, const quicktype::TradeItemBody & x);
+        void from_json(const json& j, quicktype::TradeItemDatum& x);
+        void to_json(json& j, const quicktype::TradeItemDatum& x);
 
-    inline void from_json(const json & j, quicktype::BuyOfferContext& x) {
-        x.id = j.at("id").get<std::string>();
-        x.count = j.at("count").get<int64_t>();
-        x.items = j.at("items").get<std::vector<quicktype::TraderBarterItem>>();
+        void from_json(const json& j, quicktype::TradeItemBody& x);
+        void to_json(json& j, const quicktype::TradeItemBody& x);
+
+        inline void from_json(const json& j, quicktype::BuyOfferContext& x) {
+            x.id = j.at("id").get<std::string>();
+            x.count = j.at("count").get<int64_t>();
+            x.items = j.at("items").get<std::vector<quicktype::TraderBarterItem>>();
+        }
+
+        inline void to_json(json& j, const quicktype::BuyOfferContext& x) {
+            j = json::object();
+            j["id"] = x.id;
+            j["count"] = x.count;
+            j["items"] = x.items;
+        }
+
+        inline void from_json(const json& j, quicktype::BuyDatumContext& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.offers = j.at("offers").get<std::vector<quicktype::BuyOfferContext>>();
+        }
+
+        inline void to_json(json& j, const quicktype::BuyDatumContext& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["offers"] = x.offers;
+        }
+
+        inline void from_json(const json& j, quicktype::MarketBuyReqBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::BuyDatumContext>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::MarketBuyReqBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+
+        inline void from_json(const json& j, quicktype::SellItemContext& x) {
+            x.id = j.at("id").get<std::string>();
+            x.count = j.at("count").get<int64_t>();
+            x.scheme_id = j.at("scheme_id").get<std::string>();
+        }
+
+        inline void to_json(json& j, const quicktype::SellItemContext& x) {
+            j = json::object();
+            j["id"] = x.id;
+            j["count"] = x.count;
+            j["scheme_id"] = x.scheme_id;
+        }
+
+        inline void from_json(const json& j, quicktype::SellDatumContext& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.type = j.at("type").get<std::string>();
+            x.tid = j.at("tid").get<std::string>();
+            x.items = j.at("items").get<std::vector<quicktype::SellItemContext>>();
+        }
+
+        inline void to_json(json& j, const quicktype::SellDatumContext& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["type"] = x.type;
+            j["tid"] = x.tid;
+            j["items"] = x.items;
+        }
+
+        inline void from_json(const json& j, quicktype::MarketSellReqBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::SellDatumContext>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::MarketSellReqBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::OfferRequirementsContext& x) {
+            x._tpl = j.at("_tpl").get<std::string>();
+            x.count = j.at("count").get<int64_t>();
+            x.level = j.at("level").get<int64_t>();
+            x.side = j.at("side").get<int64_t>();
+            x.onlyFunctional = j.at("onlyFunctional").get<bool>();
+        }
+
+        inline void to_json(json& j, const quicktype::OfferRequirementsContext& x) {
+            j = json::object();
+            j["_tpl"] = x._tpl;
+            j["count"] = x.count;
+            j["level"] = x.level;
+            j["side"] = x.side;
+            j["onlyFunctional"] = x.onlyFunctional;
+        }
+
+        inline void from_json(const json& j, quicktype::OfferDatumContext& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.sell_in_one_piece = j.at("sellInOnePiece").get<bool>();
+            x.items = j.at("items").get<std::vector<std::string>>();
+            x.requirements = j.at("requirements").get<std::vector<quicktype::OfferRequirementsContext>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::OfferDatumContext& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["sellInOnePiece"] = x.sell_in_one_piece;
+            j["items"] = x.items;
+            j["requirements"] = x.requirements;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::MarketOfferReqBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::OfferDatumContext>>();
+        }
+
+        inline void to_json(json& j, const quicktype::MarketOfferReqBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemStackDatum& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.item = j.at("item").get<std::string>();
+            x.with = j.at("with").get<std::string>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemStackDatum& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["item"] = x.item;
+            j["with"] = x.with;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemStackBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::ItemStackDatum>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemStackBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemTransferDatum& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.item = j.at("item").get<std::string>();
+            x.with = j.at("with").get<std::string>();
+            x.count = j.at("count").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemTransferDatum& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["item"] = x.item;
+            j["with"] = x.with;
+            j["count"] = x.count;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemTransferBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::ItemTransferDatum>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemTransferBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemMoveLocation& x) {
+            x.x = j.at("x").get<int64_t>();
+            x.y = j.at("y").get<int64_t>();
+            x.r = j.at("r").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemMoveLocation& x) {
+            j = json::object();
+            j["x"] = x.x;
+            j["y"] = x.y;
+            j["r"] = x.r;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemMoveTo& x) {
+            x.id = j.at("id").get<std::string>();
+            x.container = j.at("container").get<std::string>();
+            x.location = j.at("location").get<quicktype::ItemMoveLocation>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemMoveTo& x) {
+            j = json::object();
+            j["id"] = x.id;
+            j["container"] = x.container;
+            j["location"] = x.location;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemMoveDatum& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.item = j.at("item").get<std::string>();
+            x.to = j.at("to").get<quicktype::ItemMoveTo>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemMoveDatum& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["item"] = x.item;
+            j["to"] = x.to;
+        }
+
+        inline void from_json(const json& j, quicktype::ItemMoveBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::ItemMoveDatum>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::ItemMoveBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::TraderBarterItem& x) {
+            x._tpl = j.at("id").get<std::string>();
+            x.count = j.at("count").get<double>();
+        }
+
+        inline void to_json(json& j, const quicktype::TraderBarterItem& x) {
+            j = json::object();
+            j["id"] = x._tpl;
+            j["count"] = x.count;
+        }
+
+        inline void from_json(const json& j, quicktype::TradeItemDatum& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.type = j.at("type").get<std::string>();
+            x.tid = j.at("tid").get<std::string>();
+            x.item_id = j.at("item_id").get<std::string>();
+            x.count = j.at("count").get<int64_t>();
+            x.scheme_id = j.at("scheme_id").get<int64_t>();
+            x.scheme_items = j.at("scheme_items").get<std::vector<quicktype::TraderBarterItem>>();
+        }
+
+        inline void to_json(json& j, const quicktype::TradeItemDatum& x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["type"] = x.type;
+            j["tid"] = x.tid;
+            j["item_id"] = x.item_id;
+            j["count"] = x.count;
+            j["scheme_id"] = x.scheme_id;
+            j["scheme_items"] = x.scheme_items;
+        }
+
+        inline void from_json(const json& j, quicktype::TradeItemBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::TradeItemDatum>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::TradeItemBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
+
+        inline void from_json(const json& j, quicktype::TraderItemUpd& x) {
+            x.stack_objects_count = j.at("StackObjectsCount").get<int64_t>();
+            x.unlimited_count = quicktype::get_optional<bool>(j, "UnlimitedCount");
+            x.buy_restriction_current = quicktype::get_optional<int64_t>(j, "BuyRestrictionCurrent");
+            x.buy_restriction_max = quicktype::get_optional<int64_t>(j, "BuyRestrictionMax");
+        }
+
+        inline void to_json(json& j, const quicktype::TraderItemUpd& x) {
+            j = json::object();
+            j["StackObjectsCount"] = x.stack_objects_count;
+            j["UnlimitedCount"] = x.unlimited_count;
+            j["BuyRestrictionCurrent"] = x.buy_restriction_current;
+            j["BuyRestrictionMax"] = x.buy_restriction_max;
+        }
     }
-
-    inline void to_json(json & j, const quicktype::BuyOfferContext & x) {
-        j = json::object();
-        j["id"] = x.id;
-        j["count"] = x.count;
-        j["items"] = x.items;
-    }
-
-    inline void from_json(const json & j, quicktype::BuyDatumContext& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.offers = j.at("offers").get<std::vector<quicktype::BuyOfferContext>>();
-    }
-
-    inline void to_json(json & j, const quicktype::BuyDatumContext & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["offers"] = x.offers;
-    }
-
-    inline void from_json(const json & j, quicktype::MarketBuyReqBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::BuyDatumContext>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::MarketBuyReqBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-
-    inline void from_json(const json & j, quicktype::SellItemContext& x) {
-        x.id = j.at("id").get<std::string>();
-        x.count = j.at("count").get<int64_t>();
-        x.scheme_id = j.at("scheme_id").get<std::string>();
-    }
-
-    inline void to_json(json & j, const quicktype::SellItemContext & x) {
-        j = json::object();
-        j["id"] = x.id;
-        j["count"] = x.count;
-        j["scheme_id"] = x.scheme_id;
-    }
-
-    inline void from_json(const json & j, quicktype::SellDatumContext& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.type = j.at("type").get<std::string>();
-        x.tid = j.at("tid").get<std::string>();
-        x.items = j.at("items").get<std::vector<quicktype::SellItemContext>>();
-    }
-
-    inline void to_json(json & j, const quicktype::SellDatumContext & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["type"] = x.type;
-        j["tid"] = x.tid;
-        j["items"] = x.items;
-    }
-
-    inline void from_json(const json & j, quicktype::MarketSellReqBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::SellDatumContext>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::MarketSellReqBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::OfferRequirementsContext& x) {
-        x._tpl = j.at("_tpl").get<std::string>();
-        x.count = j.at("count").get<int64_t>();
-        x.level = j.at("level").get<int64_t>();
-        x.side = j.at("side").get<int64_t>();
-        x.onlyFunctional = j.at("onlyFunctional").get<bool>();
-    }
-
-    inline void to_json(json & j, const quicktype::OfferRequirementsContext & x) {
-        j = json::object();
-        j["_tpl"] = x._tpl;
-        j["count"] = x.count;
-        j["level"] = x.level;
-        j["side"] = x.side;
-        j["onlyFunctional"] = x.onlyFunctional;
-    }
-
-    inline void from_json(const json & j, quicktype::OfferDatumContext& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.sell_in_one_piece = j.at("sellInOnePiece").get<bool>();
-        x.items = j.at("items").get<std::vector<std::string>>();
-        x.requirements = j.at("requirements").get<std::vector<quicktype::OfferRequirementsContext>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::OfferDatumContext & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["sellInOnePiece"] = x.sell_in_one_piece;
-        j["items"] = x.items;
-        j["requirements"] = x.requirements;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::MarketOfferReqBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::OfferDatumContext>>();
-    }
-
-    inline void to_json(json & j, const quicktype::MarketOfferReqBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemStackDatum& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.item = j.at("item").get<std::string>();
-        x.with = j.at("with").get<std::string>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemStackDatum & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["item"] = x.item;
-        j["with"] = x.with;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemStackBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::ItemStackDatum>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemStackBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemTransferDatum& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.item = j.at("item").get<std::string>();
-        x.with = j.at("with").get<std::string>();
-        x.count = j.at("count").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemTransferDatum & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["item"] = x.item;
-        j["with"] = x.with;
-        j["count"] = x.count;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemTransferBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::ItemTransferDatum>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemTransferBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemMoveLocation& x) {
-        x.x = j.at("x").get<int64_t>();
-        x.y = j.at("y").get<int64_t>();
-        x.r = j.at("r").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemMoveLocation & x) {
-        j = json::object();
-        j["x"] = x.x;
-        j["y"] = x.y;
-        j["r"] = x.r;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemMoveTo& x) {
-        x.id = j.at("id").get<std::string>();
-        x.container = j.at("container").get<std::string>();
-        x.location = j.at("location").get<quicktype::ItemMoveLocation>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemMoveTo & x) {
-        j = json::object();
-        j["id"] = x.id;
-        j["container"] = x.container;
-        j["location"] = x.location;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemMoveDatum& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.item = j.at("item").get<std::string>();
-        x.to = j.at("to").get<quicktype::ItemMoveTo>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemMoveDatum & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["item"] = x.item;
-        j["to"] = x.to;
-    }
-
-    inline void from_json(const json & j, quicktype::ItemMoveBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::ItemMoveDatum>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::ItemMoveBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::TraderBarterItem& x) {
-        x._tpl = j.at("id").get<std::string>();
-        x.count = j.at("count").get<double>();
-    }
-
-    inline void to_json(json & j, const quicktype::TraderBarterItem & x) {
-        j = json::object();
-        j["id"] = x._tpl;
-        j["count"] = x.count;
-    }
-
-    inline void from_json(const json & j, quicktype::TradeItemDatum& x) {
-        x.action = j.at("Action").get<std::string>();
-        x.type = j.at("type").get<std::string>();
-        x.tid = j.at("tid").get<std::string>();
-        x.item_id = j.at("item_id").get<std::string>();
-        x.count = j.at("count").get<int64_t>();
-        x.scheme_id = j.at("scheme_id").get<int64_t>();
-        x.scheme_items = j.at("scheme_items").get<std::vector<quicktype::TraderBarterItem>>();
-    }
-
-    inline void to_json(json & j, const quicktype::TradeItemDatum & x) {
-        j = json::object();
-        j["Action"] = x.action;
-        j["type"] = x.type;
-        j["tid"] = x.tid;
-        j["item_id"] = x.item_id;
-        j["count"] = x.count;
-        j["scheme_id"] = x.scheme_id;
-        j["scheme_items"] = x.scheme_items;
-    }
-
-    inline void from_json(const json & j, quicktype::TradeItemBody& x) {
-        x.data = j.at("data").get<std::vector<quicktype::TradeItemDatum>>();
-        x.tm = j.at("tm").get<int64_t>();
-    }
-
-    inline void to_json(json & j, const quicktype::TradeItemBody & x) {
-        j = json::object();
-        j["data"] = x.data;
-        j["tm"] = x.tm;
-    }
-
-    inline void from_json(const json & j, quicktype::TraderItemUpd& x) {
-        x.stack_objects_count = j.at("StackObjectsCount").get<int64_t>();
-        x.unlimited_count = quicktype::get_optional<bool>(j, "UnlimitedCount");
-        x.buy_restriction_current = quicktype::get_optional<int64_t>(j, "BuyRestrictionCurrent");
-        x.buy_restriction_max = quicktype::get_optional<int64_t>(j, "BuyRestrictionMax");
-    }
-
-    inline void to_json(json & j, const quicktype::TraderItemUpd & x) {
-        j = json::object();
-        j["StackObjectsCount"] = x.stack_objects_count;
-        j["UnlimitedCount"] = x.unlimited_count;
-        j["BuyRestrictionCurrent"] = x.buy_restriction_current;
-        j["BuyRestrictionMax"] = x.buy_restriction_max;
-    }
-}
 }
 
 namespace TarkovAPI
 {
-	static std::string GAME_VERSION 		= "0.12.3.5834";
-	static std::string LAUNCHER_VERSION 	= "0.9.3.1023";
-	static std::string UNITY_VERSION 		= "2018.4.13f1";
+    static std::string GAME_VERSION = "0.12.3.5834";
+    static std::string LAUNCHER_VERSION = "0.9.3.1023";
+    static std::string UNITY_VERSION = "2018.4.13f1";
 
-	static constexpr auto LAUNCHER_ENDPOINT = "https://launcher.escapefromtarkov.com";
-	static constexpr auto PROD_ENDPOINT 	= "https://prod.escapefromtarkov.com";
-	static constexpr auto TRADING_ENDPOINT 	= "https://trading.escapefromtarkov.com";
-	static constexpr auto RAGFAIR_ENDPOINT 	= "https://ragfair.escapefromtarkov.com";
+    static constexpr auto LAUNCHER_ENDPOINT = "https://launcher.escapefromtarkov.com";
+    static constexpr auto PROD_ENDPOINT = "https://prod.escapefromtarkov.com";
+    static constexpr auto TRADING_ENDPOINT = "https://trading.escapefromtarkov.com";
+    static constexpr auto RAGFAIR_ENDPOINT = "https://ragfair.escapefromtarkov.com";
 
-    static constexpr auto ROUBLE_ITEM_ID    = "5449016a4bdc2d6f028b456f";
-    static constexpr auto USD_ITEM_ID       = "5696686a4bdc2da3298b456a";
-    static constexpr auto EURO_ITEM_ID      = "569668774bdc2da2298b4568";
+    static constexpr auto ROUBLE_ITEM_ID = "5449016a4bdc2d6f028b456f";
+    static constexpr auto USD_ITEM_ID = "5696686a4bdc2da3298b456a";
+    static constexpr auto EURO_ITEM_ID = "569668774bdc2da2298b4568";
 
-	enum ErrorCodes
-	{
-		OK = 0,
-		NotAuthorized = 201,
-		InvalidUserID = 205,
-		BadLogin = 206,
-		InvalidParameters = 207,
-		TwoFactorRequired = 209,
-		BadTwoFactorCode = 211,
-		CaptchaRequired = 214,
-		InvalidBarterItems = 228,
-		RateLimited = 230,
-		Maintenance = 263,
-		BackendError = 1000,
-		MaxOfferCount = 1501,
-		InsufficientTaxFunds = 1502,
-		OfferNotFound = 1507,
-		BadLoyaltyLevel = 1510,
-		OfferNotAvailableYet = 1512,
-		TransactionError = 1514
-	};
+    enum ErrorCodes
+    {
+        OK = 0,
+        NotAuthorized = 201,
+        InvalidUserID = 205,
+        BadLogin = 206,
+        InvalidParameters = 207,
+        TwoFactorRequired = 209,
+        BadTwoFactorCode = 211,
+        CaptchaRequired = 214,
+        InvalidBarterItems = 228,
+        RateLimited = 230,
+        Maintenance = 263,
+        BackendError = 1000,
+        MaxOfferCount = 1501,
+        InsufficientTaxFunds = 1502,
+        OfferNotFound = 1507,
+        BadLoyaltyLevel = 1510,
+        OfferNotAvailableYet = 1512,
+        TransactionError = 1514
+    };
 
-	enum Error : uint8_t
-	{
-    	InvalidParameter,
-		CprApiFailed,
-		CprSessionFailed,
-		CprPostFailed,
-		ZlibDecompressFailed,
-		JsonParseFailed,
-		JsonBadFormat,
-		ApiServerError,
-		KeepAliveFailed,
-    	SelectProfileFail,
-		VersionCheckError,
-		ResponseHandleFailed,
+    enum Error : uint8_t
+    {
+        InvalidParameter,
+        CprApiFailed,
+        CprSessionFailed,
+        CprPostFailed,
+        ZlibDecompressFailed,
+        JsonParseFailed,
+        JsonBadFormat,
+        ApiServerError,
+        KeepAliveFailed,
+        SelectProfileFail,
+        VersionCheckError,
+        ResponseHandleFailed,
         MarketBadRequest,
         NullDataForParse,
         TraderNotFound,
         ItemNotFound
-	};
+    };
 
-	inline quicktype::ResponseBody parse_response(const nlohmann::json& j)
-	{
-		quicktype::ResponseBody x{};
+    inline quicktype::ResponseBody parse_response(const nlohmann::json& j)
+    {
+        quicktype::ResponseBody x{};
         x.data = quicktype::get_untyped(j, "data");
         x.err = j.at("err").get<int64_t>();
         x.errmsg = j.at("errmsg").is_string() ? j.at("errmsg").get<std::string>() : "";
-		return x;
+        return x;
     }
 
     inline nlohmann::json serialize_market_finder(const quicktype::MarketFilterBody& x)
-	{
+    {
         auto j = nlohmann::json::object();
         j["page"] = x.page;
         j["limit"] = x.limit;
@@ -815,7 +815,7 @@ namespace TarkovAPI
         j["linkedSearchId"] = x.linked_search_id;
         j["neededSearchId"] = x.needed_search_id;
         j["tm"] = x.tm;
-		return j;
+        return j;
     }
 
     inline nlohmann::json serialize_market_buy_request(const quicktype::MarketBuyReqBody& x)
@@ -825,7 +825,7 @@ namespace TarkovAPI
         j["tm"] = x.tm;
         return j;
     }
-    
+
     inline nlohmann::json serialize_market_sell_request(const quicktype::MarketSellReqBody& x)
     {
         auto j = nlohmann::json::object();

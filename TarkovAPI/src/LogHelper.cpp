@@ -25,7 +25,7 @@ namespace TarkovAPI
             sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(m_stFileName.c_str()));
 
             m_pkLoggerImpl = std::make_shared<spdlog::logger>(m_stLoggerName.c_str(), sinks.begin(), sinks.end());
-//          m_pkLoggerImpl->set_error_handler(LogErrorHandler);
+            //          m_pkLoggerImpl->set_error_handler(LogErrorHandler);
         }
         catch (const spdlog::spdlog_ex & ex)
         {
@@ -50,28 +50,28 @@ namespace TarkovAPI
         {
             switch (nLevel)
             {
-                case LL_SYS:
-                    m_pkLoggerImpl->info(stBuffer.c_str());
-                    break;
-                case LL_CRI:
-                    m_pkLoggerImpl->critical(stBuffer.c_str());
-                    break;
-                case LL_ERR:
-                    m_pkLoggerImpl->error(stBuffer.c_str());
-                    break;
-                case LL_DEV:
-                    m_pkLoggerImpl->debug(stBuffer.c_str());
-                    break;
-                case LL_TRACE:
-                    m_pkLoggerImpl->trace(stBuffer.c_str());
-                    break;
-                case LL_WARN:
-                    m_pkLoggerImpl->warn(stBuffer.c_str());
-                    break;
+            case LL_SYS:
+                m_pkLoggerImpl->info(stBuffer.c_str());
+                break;
+            case LL_CRI:
+                m_pkLoggerImpl->critical(stBuffer.c_str());
+                break;
+            case LL_ERR:
+                m_pkLoggerImpl->error(stBuffer.c_str());
+                break;
+            case LL_DEV:
+                m_pkLoggerImpl->debug(stBuffer.c_str());
+                break;
+            case LL_TRACE:
+                m_pkLoggerImpl->trace(stBuffer.c_str());
+                break;
+            case LL_WARN:
+                m_pkLoggerImpl->warn(stBuffer.c_str());
+                break;
             }
             m_pkLoggerImpl->flush();
         }
-        catch (const spdlog::spdlog_ex& ex)
+        catch (const spdlog::spdlog_ex & ex)
         {
             Logf(CUSTOM_LOG_ERROR_FILENAME, "Exception throw on sys_log (spdlog::spdlog_ex %s\n", ex.what());
             abort();

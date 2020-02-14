@@ -9,34 +9,34 @@ using namespace TarkovAPI;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
- 	AllocConsole();
-	freopen("CONOUT$", "a", stdout);
-	freopen("CONIN$", "r", stdin);
-    
+    AllocConsole();
+    freopen("CONOUT$", "a", stdout);
+    freopen("CONIN$", "r", stdin);
+
     auto apiMgr = std::make_unique<TarkovAPIManager>();
-	if (!apiMgr || !apiMgr.get() || !apiMgr->InitializeTarkovAPIManager())
-	{
-		std::cout << "Tarkov API initilization fail!" << std::endl;
-		return EXIT_FAILURE;
-	}
+    if (!apiMgr || !apiMgr.get() || !apiMgr->InitializeTarkovAPIManager())
+    {
+        std::cout << "Tarkov API initilization fail!" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     try
     {
         apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
     }
-    catch (const json::exception& ex)
+    catch (const json::exception & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
-	}
-    catch (const TarkovAPIException& ex)
+    }
+    catch (const TarkovAPIException & ex)
     {
         apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("An exception handled! Data: {}", ex.details().c_str()));
     }
-	
+
     std::cin.get();
 
     apiMgr->FinalizeTarkovAPIManager();
 
     FreeConsole();
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

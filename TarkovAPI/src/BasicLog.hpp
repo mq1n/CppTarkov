@@ -25,7 +25,7 @@ namespace TarkovAPI
         FileLog(stFileName.c_str(), szBuffer);
     }
 
-    static void DebugLog(const char * c_szLogData)
+    static void DebugLog(const char* c_szLogData)
     {
         OutputDebugStringA(c_szLogData);
     }
@@ -33,7 +33,7 @@ namespace TarkovAPI
     static void DebugLogf(const char* c_szFormat, ...)
     {
         char szBuffer[8192] = { 0 };
-        
+
         va_list vaArgList;
         va_start(vaArgList, c_szFormat);
         vsprintf_s(szBuffer, c_szFormat, vaArgList);
@@ -42,7 +42,7 @@ namespace TarkovAPI
         DebugLog(szBuffer);
     }
 
-    static void ConsoleLog(const char * c_szLogData)
+    static void ConsoleLog(const char* c_szLogData)
     {
         fputs(c_szLogData, stdout);
     }
