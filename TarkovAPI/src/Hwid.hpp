@@ -84,7 +84,7 @@ namespace TarkovAPI
         static auto random_md5()
         {
             const auto data = Random::get<uint64_t>();
-            return fmt::format("{}", md5::CreateHash(reinterpret_cast<const void*>(data), sizeof(uint64_t)));
+            return fmt::format("{}", md5::CreateHash(reinterpret_cast<const void*>(&data), sizeof(uint64_t)));
         }
 
         static auto short_md5()
