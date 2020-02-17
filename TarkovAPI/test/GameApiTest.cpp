@@ -850,11 +850,11 @@ TEST_CASE("Merge bullets in inventory", "[multi-file:4]")
             "casingName":"9x19 mm Pst gzh"
         },
         */
-        auto rouble_ids = apiMgr->FindItemStack("56d59d3ad2720bdb418b4577", std::numeric_limits<uint64_t>::max());
+        auto bullet_ids = apiMgr->FindItemStack("56d59d3ad2720bdb418b4577", std::numeric_limits<uint64_t>::max());
 
         auto from_id = std::string();
         auto to_id = std::string();
-        auto it = std::find_if(rouble_ids.begin(), rouble_ids.end(), [&from_id, &to_id](const quicktype::TraderBarterItem& x)
+        auto it = std::find_if(bullet_ids.begin(), bullet_ids.end(), [&from_id, &to_id](const quicktype::TraderBarterItem& x)
             {
                 if (to_id.empty())
                 {
