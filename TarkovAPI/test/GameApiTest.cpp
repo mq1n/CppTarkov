@@ -885,3 +885,142 @@ TEST_CASE("Merge bullets in inventory", "[multi-file:4]")
     delete apiMgr;
     apiMgr = nullptr;
 }
+
+TEST_CASE("Mail stuffs", "[multi-file:4]")
+{
+    auto apiMgr = new TarkovAPIManager();
+    REQUIRE(apiMgr);
+
+    try
+    {
+        auto ret = apiMgr->InitializeTarkovAPIManager();
+        REQUIRE(ret);
+
+        apiMgr->Login(ACC_EMAIL, ACC_PWD, ACC_HWID);
+
+        auto me = apiMgr->GetMyProfile();
+        REQUIRE(me.contains("_id"));
+
+        apiMgr->SelectProfile(me["_id"].get<std::string>());
+        REQUIRE(me.contains("Info"));
+        REQUIRE(me["Info"].contains("Nickname"));
+
+        apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("> Hello, {}!", me["Info"]["Nickname"].get<std::string>()));
+
+        auto items = apiMgr->GetItems();
+        //apiMgr->FindBlankStashPos();
+        //__debugbreak();
+
+        auto mail_list = apiMgr->GetMailList();
+        REQUIRE(!mail_list.empty());
+        REQUIRE(mail_list.is_array());
+
+        for (const auto& mails : mail_list.items())
+        {
+            const auto mail_index = mails.key();
+            const auto mail_data = mails.value();
+            
+            REQUIRE(mail_data.is_object());
+            REQUIRE(mail_data.contains("_id"));
+            REQUIRE(mail_data.contains("type"));
+
+            if (mail_data["type"].get<int64_t>() == MailTypes::MAIL_TYPE_MARKET)
+            {
+                auto mail = apiMgr->GetMail(mail_data["_id"], mail_data["type"].get<int64_t>());
+                REQUIRE(!mail.empty());
+
+                auto mail_attachments = apiMgr->GetMailAttachments(mail_data["_id"]);
+                REQUIRE(!mail_attachments.empty());
+                REQUIRE(mail_attachments.contains("messages"));
+
+                for (const auto& message : mail_attachments["messages"].items())
+                {
+                    /*
+                    {
+                        "_id":"...",
+                        "dt":1234567890.3169,
+                        "hasRewards":true,
+                        "items":{
+                            "data":[
+                                {
+                                    "_id":"...",
+                                    "_tpl":"...",
+                                    "parentId":"...",
+                                    "slotId":"main",
+                                    "upd":{
+                                        "StackObjectsCount":100
+                                    }
+                                }
+                            ],
+                            "stash":"..."
+                        },
+                        "maxStorageTime":0,
+                        "systemData":{
+                            "buyerNickname":"...",
+                            "itemCount":1,
+                            "soldItem":"..."
+                        },
+                        "templateId":"...",
+                        "type":4,
+                        "uid":"..."
+                    }
+                    */
+
+                    auto context = message.value();
+                    REQUIRE(context.contains("_id"));
+                    REQUIRE(context.contains("items"));
+                    REQUIRE(context["items"].contains("data"));
+                    REQUIRE(!context["items"]["data"].empty());
+
+                    // TODO: For rouble schema IDs, At the first search < 500000 roubles for merge in stash
+                    /* // Merge payload:
+                    {
+                        "Action": "Merge",
+                        "item": "...",
+                        "with": "...",
+                        "fromOwner": {
+                            "id": "...",
+                            "type": "Mail"
+                        }
+                    }
+                    */
+
+                    for (const auto& item : context["items"]["data"].items())
+                    {
+                        auto reward = item.value();
+                        REQUIRE(reward.contains("_id"));
+                       
+                        auto stash_id = apiMgr->GetMainStashID();
+                        REQUIRE(!stash_id.empty());
+
+                        // TODO: Enumerate stash items and find blank position automatically
+                        auto pos = quicktype::MailRewardToLocation {
+                            2,
+                            0,
+                            "Horizontal",
+                            true
+                        };
+
+                        auto get_reward_ret = apiMgr->GetMailReward(reward["_id"].get<std::string>(), stash_id, context["_id"].get<std::string>(), pos);
+                        REQUIRE(!get_reward_ret.empty());
+                        return; // Just get once for pre-defined postion
+                    }
+                }
+            }
+        }
+
+        ret = apiMgr->FinalizeTarkovAPIManager();
+        REQUIRE(ret);
+    }
+    catch (const json::exception & ex)
+    {
+        apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("json::exception - An exception handled! Data: {}", ex.what()));
+    }
+    catch (const TarkovAPIException & ex)
+    {
+        apiMgr->Log(__FUNCTION__, LL_SYS, fmt::format("TarkovAPIException - An exception handled! Data: {}", ex.details().c_str()));
+    }
+
+    delete apiMgr;
+    apiMgr = nullptr;
+}

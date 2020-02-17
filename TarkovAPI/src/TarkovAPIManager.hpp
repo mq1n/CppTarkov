@@ -11,6 +11,7 @@
 
 #include "Constants.hpp"
 #include "Exception.hpp"
+#include "StashHelper.hpp"
 
 #include <cpr/cpr.h>
 #include <json.hpp>
@@ -77,6 +78,11 @@ namespace TarkovAPI
 		json StackItem(const std::string& from_item_id, const std::string& to_item_id, int64_t count = 0);
 		json MoveItem(const std::string& item_id, const quicktype::ItemMoveTo& destination);
 
+		json GetMailList();
+		json GetMail(const std::string& mail_id, int64_t type);
+		json GetMailAttachments(const std::string& mail_id);
+		json GetMailReward(const std::string& from_item_id, const std::string& to_item_id, const std::string& previous_owner_id, const quicktype::MailRewardToLocation& to_stash_location);
+
 		double GetItemPrice(double listed_price, int64_t amount);
 		json GetItems();
 		json GetItemPrices();
@@ -84,6 +90,8 @@ namespace TarkovAPI
 		json GetMyItems();
 		uint64_t GetRoubleCount();
 		std::vector <quicktype::TraderBarterItem> FindItemStack(const std::string& schema_id, uint64_t required = 1);
+		std::string GetMainStashID();
+		quicktype::ItemMoveLocation FindBlankStashPos();
 		std::string GetItemName(const std::string& schema_id);
 
 	private:

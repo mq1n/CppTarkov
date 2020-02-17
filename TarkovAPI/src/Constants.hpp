@@ -191,6 +191,41 @@ namespace quicktype // https://app.quicktype.io
         int64_t tm;
     };
 
+    // Merge mail reward
+    struct MailFromOwner
+    {
+        std::string id;
+        std::string type;
+    };
+
+    struct MailRewardToLocation
+    {
+        int64_t x;
+        int64_t y;
+        std::string r;
+        bool is_searched;
+    };
+
+    struct MailRewardTo
+    {
+        std::string id;
+        std::string container;
+        quicktype::MailRewardToLocation location;
+    };
+
+    struct MailRewardDatum
+    {
+        std::string action;
+        std::string item;
+        quicktype::MailRewardTo to;
+        quicktype::MailFromOwner from_owner;
+    };
+    struct MailRewardBody
+    {
+        std::vector <quicktype::MailRewardDatum> data;
+        int64_t tm;
+    };
+
     // Move
     struct ItemMoveLocation
     {
@@ -426,6 +461,21 @@ namespace nlohmann {
 
         void from_json(const json& j, quicktype::ItemTransferBody& x);
         void to_json(json& j, const quicktype::ItemTransferBody& x);
+
+        void from_json(const json & j, quicktype::MailFromOwner & x);
+        void to_json(json & j, const quicktype::MailFromOwner & x);
+
+        void from_json(const json & j, quicktype::MailRewardToLocation & x);
+        void to_json(json & j, const quicktype::MailRewardToLocation & x);
+
+        void from_json(const json & j, quicktype::MailRewardTo & x);
+        void to_json(json & j, const quicktype::MailRewardTo & x);
+
+        void from_json(const json & j, quicktype::MailRewardDatum & x);
+        void to_json(json & j, const quicktype::MailRewardDatum & x);
+
+        void from_json(const json & j, quicktype::MailRewardBody & x);
+        void to_json(json & j, const quicktype::MailRewardBody & x);
 
         void from_json(const json& j, quicktype::ItemMoveLocation& x);
         void to_json(json& j, const quicktype::ItemMoveLocation& x);
@@ -723,6 +773,71 @@ namespace nlohmann {
             j["BuyRestrictionCurrent"] = x.buy_restriction_current;
             j["BuyRestrictionMax"] = x.buy_restriction_max;
         }
+
+        inline void from_json(const json & j, quicktype::MailFromOwner& x) {
+            x.id = j.at("id").get<std::string>();
+            x.type = j.at("type").get<std::string>();
+        }
+
+        inline void to_json(json & j, const quicktype::MailFromOwner & x) {
+            j = json::object();
+            j["id"] = x.id;
+            j["type"] = x.type;
+        }
+
+        inline void from_json(const json & j, quicktype::MailRewardToLocation& x) {
+            x.x = j.at("x").get<int64_t>();
+            x.y = j.at("y").get<int64_t>();
+            x.r = j.at("r").get<std::string>();
+            x.is_searched = j.at("isSearched").get<bool>();
+        }
+
+        inline void to_json(json & j, const quicktype::MailRewardToLocation & x) {
+            j = json::object();
+            j["x"] = x.x;
+            j["y"] = x.y;
+            j["r"] = x.r;
+            j["isSearched"] = x.is_searched;
+        }
+
+        inline void from_json(const json & j, quicktype::MailRewardTo& x) {
+            x.id = j.at("id").get<std::string>();
+            x.container = j.at("container").get<std::string>();
+            x.location = j.at("location").get<quicktype::MailRewardToLocation>();
+        }
+
+        inline void to_json(json & j, const quicktype::MailRewardTo & x) {
+            j = json::object();
+            j["id"] = x.id;
+            j["container"] = x.container;
+            j["location"] = x.location;
+        }
+
+        inline void from_json(const json & j, quicktype::MailRewardDatum& x) {
+            x.action = j.at("Action").get<std::string>();
+            x.item = j.at("item").get<std::string>();
+            x.to = j.at("to").get<quicktype::MailRewardTo>();
+            x.from_owner = j.at("fromOwner").get<quicktype::MailFromOwner>();
+        }
+
+        inline void to_json(json & j, const quicktype::MailRewardDatum & x) {
+            j = json::object();
+            j["Action"] = x.action;
+            j["item"] = x.item;
+            j["to"] = x.to;
+            j["fromOwner"] = x.from_owner;
+        }
+
+        inline void from_json(const json& j, quicktype::MailRewardBody& x) {
+            x.data = j.at("data").get<std::vector<quicktype::MailRewardDatum>>();
+            x.tm = j.at("tm").get<int64_t>();
+        }
+
+        inline void to_json(json& j, const quicktype::MailRewardBody& x) {
+            j = json::object();
+            j["data"] = x.data;
+            j["tm"] = x.tm;
+        }
     }
 }
 
@@ -740,6 +855,15 @@ namespace TarkovAPI
     static constexpr auto ROUBLE_ITEM_ID = "5449016a4bdc2d6f028b456f";
     static constexpr auto USD_ITEM_ID = "5696686a4bdc2da3298b456a";
     static constexpr auto EURO_ITEM_ID = "569668774bdc2da2298b4568";
+    
+    static constexpr auto MAXIMUM_STASH_SIZE = 10 * 66;
+
+    enum MailTypes
+    {
+        MAIL_TYPE_NPC = 2,
+        MAIL_TYPE_MARKET = 4,
+        MAIL_TYPE_SYSTEM = 7
+    };
 
     enum ErrorCodes
     {
@@ -879,5 +1003,13 @@ namespace TarkovAPI
         x._tpl = j.at("_tpl").get<std::string>();
         x.upd = quicktype::get_optional<quicktype::TraderItemUpd>(j, "upd");
         return x;
+    }
+
+    inline nlohmann::json serialize_get_mail_reward(const quicktype::MailRewardBody & x)
+    {
+        auto j = nlohmann::json::object();
+        j["data"] = x.data;
+        j["tm"] = x.tm;
+        return j;
     }
 };

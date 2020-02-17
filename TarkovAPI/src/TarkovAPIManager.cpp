@@ -687,6 +687,114 @@ namespace TarkovAPI
         return m_pkJsonItemPrices;
     }
 
+    json TarkovAPIManager::GetMailList()
+    {
+        auto url = fmt::format(
+            "{}/client/mail/dialog/list",
+            PROD_ENDPOINT
+        );
+
+        json body{};
+        body["crc"] = 0;
+
+        auto res = Post_Json(url, body.dump());
+
+        if (!OnResponseHandle(__FUNCTION__, res.err, res.data.dump()))
+        {
+            throw TarkovAPIException(Error::ResponseHandleFailed, res.errmsg);
+        }
+        return res.data;
+    }
+
+    json TarkovAPIManager::GetMail(const std::string& mail_id, int64_t type)
+    {
+        auto url = fmt::format(
+            "{}/client/mail/dialog/view",
+            PROD_ENDPOINT
+        );
+
+        json body{};
+        body["dialogId"] = mail_id;
+        body["type"] = type;
+
+        auto res = Post_Json(url, body.dump());
+
+        if (!OnResponseHandle(__FUNCTION__, res.err, res.data.dump()))
+        {
+            throw TarkovAPIException(Error::ResponseHandleFailed, res.errmsg);
+        }
+        return res.data;
+    }
+
+    json TarkovAPIManager::GetMailAttachments(const std::string& mail_id)
+    {
+        auto url = fmt::format(
+            "{}/client/mail/dialog/getAllAttachments",
+            PROD_ENDPOINT
+        );
+
+        json body{};
+        body["dialogId"] = mail_id;
+
+        auto res = Post_Json(url, body.dump());
+
+        if (!OnResponseHandle(__FUNCTION__, res.err, res.data.dump()))
+        {
+            throw TarkovAPIException(Error::ResponseHandleFailed, res.errmsg);
+        }
+        return res.data;
+    }
+
+    json TarkovAPIManager::GetMailReward(const std::string& from_item_id, const std::string& to_item_id, const std::string& previous_owner_id, const quicktype::MailRewardToLocation& to_stash_location)
+    {
+        if (from_item_id.empty() || to_item_id.empty() || previous_owner_id.empty())
+        {
+            throw TarkovAPIException(Error::InvalidParameter);
+        }
+
+        auto url = fmt::format(
+            "{}/client/game/profile/items/moving",
+            PROD_ENDPOINT
+        );
+
+        auto body = quicktype::MailRewardBody
+        {
+            std::vector <quicktype::MailRewardDatum>
+            {
+                quicktype::MailRewardDatum
+                {
+                    "Move",
+                    from_item_id,
+                    quicktype::MailRewardTo
+                    {
+                        to_item_id,
+                        "hideout",
+                        to_stash_location
+                    },
+                    quicktype::MailFromOwner
+                    {
+                        previous_owner_id,
+                        "Mail"
+                    }
+                }
+            },
+            2
+        };
+        
+        auto req = serialize_get_mail_reward(body).dump();
+        auto res = Post_Json(url, req);
+
+        if (!OnResponseHandle(__FUNCTION__, res.err, res.data.dump()))
+        {
+            throw TarkovAPIException(Error::ResponseHandleFailed, res.errmsg);
+        }
+        if (res.data.contains("badRequest") && !res.data["badRequest"].empty())
+        {
+            throw TarkovAPIException(Error::MarketBadRequest, res.data["badRequest"].dump());
+        }
+        return res.data;
+    }
+
     json TarkovAPIManager::GetLocations()
     {
         if (!m_pkJsonLocations.empty())
@@ -1220,6 +1328,77 @@ namespace TarkovAPI
                 return false;
             });
         return roubleCount;
+    }
+
+    std::string TarkovAPIManager::GetMainStashID()
+    {
+        auto my_items = GetMyItems();
+
+        auto main_stash_id = std::string();
+        for (auto i = 0; i < MAXIMUM_STASH_SIZE; ++i)
+        {
+            auto item = my_items[i];
+            if (!item.empty())
+            {
+                if (GetItemName(item["_tpl"].get<std::string>()) == "Stash") // Find first stash ID, which is parent of all other single items
+                {
+                    main_stash_id = item["_id"];
+                    break;
+                }
+            }
+        }
+        return main_stash_id;
+    }
+
+    quicktype::ItemMoveLocation TarkovAPIManager::FindBlankStashPos() // Not works ATM
+    {   
+        quicktype::ItemMoveLocation a; 
+        return a;
+        
+        auto stash_helper = StashHelper{10, 26};
+        auto items = GetItems();
+
+        auto main_stash_id = GetMainStashID();
+
+        auto my_items = GetMyItems();
+        for (const auto& root : my_items)
+        {
+                if (root.is_object() && root.contains("_tpl") &&
+                    root.contains("parentId") && root["parentId"].get<std::string>() == main_stash_id &&
+                    root.contains("location") && root["location"].is_object())
+                {
+                    auto x = root["location"]["x"].get<int32_t>() + 1;
+                    auto y = root["location"]["y"].get<int32_t>() + 1;
+
+                    if (items.contains(root["_tpl"]))
+                    {
+                        auto item_data = items[root["_tpl"].get<std::string>()];
+                        if (item_data.is_object() && item_data.contains("_props") &&
+                            item_data["_props"].contains("Width") && item_data["_props"].contains("Height"))
+                        {
+                            auto width = item_data["_props"]["Width"].get<int32_t>();
+                            auto height = item_data["_props"]["Height"].get<int32_t>();
+                            // FIXME: Customized weapon sizes are not correct, it's just throw base weapon size
+
+                            if (root["location"]["r"].get<int64_t>())
+                                std::swap(width, height);
+
+                            auto stash_base_pos = ((y * stash_helper.GetWidth()) + x) - stash_helper.GetWidth();
+
+                            Log(__FUNCTION__, LL_SYS, fmt::format("{} / {} - {} ({})  | {} - {}",
+                                GetItemName(root["_tpl"].get<std::string>()), x, y, stash_base_pos, width, height));
+
+                            stash_helper.Put(
+                                stash_base_pos,
+                                width,
+                                height
+                            );
+                        }
+                    }
+                }
+        };
+        
+        stash_helper.Dump();
     }
 
     std::vector <quicktype::TraderBarterItem> TarkovAPIManager::FindItemStack(const std::string& schema_id, uint64_t required)
